@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jun 18 13:41:55 2021
+
+@author: Luis Fernando Marin
+@email: lfmarins@tecgraf.puc-rio.br
+"""
+
+import os
 import math
 import glob
 import numpy as np
@@ -11,6 +20,14 @@ path2 = 'Results/'
 
 # draw points on the plane
 def plotPoints(name,puntos):
+# =============================================================================
+#     Function used to create figures and save them.
+#     Input:
+#         name: Name with which the generated figure will be saved.
+#         puntos: Arrangement with the list of points (x, y) to be drawn.
+#     Output:
+#         displays the created figure on the screen and saves it in the Figures folder.
+# =============================================================================
     lista = puntos[:,-1]
     plt.title(name[:-4])
     plt.plot(puntos[:,[0]], puntos[:,[1]],'bo')
@@ -29,7 +46,16 @@ def plotPoints(name,puntos):
     
 # draw points and outline on the plane 
 def plotPointsOutline(name,puntos,outline):
-    outline = np.append(outline,outline[0])
+# =============================================================================
+#     Function to create a graph with the points including the outline.
+#     Input:
+#         name: Name with which the generated figure will be saved.
+#         puntos: Arrangement with the list of points (x, y) to be drawn.
+#         outline: Set of points that form the contour.
+#     Output:
+#         displays the created figure on the screen and saves it in the Figures folder.
+#     outline = np.append(outline,outline[0])
+# =============================================================================
     x = []
     y = []
     for i in range(0, len(outline)):
@@ -56,6 +82,16 @@ def plotPointsOutline(name,puntos,outline):
 
 # draw points and triangles on the plane 
 def plotPointsTriangles(name,puntos,triangles):
+# =============================================================================
+#     Function to create a graph with the points including triangulation.
+#     Input:
+#         name: Name with which the generated figure will be saved.
+#         puntos: Arrangement with the list of points (x, y) to be drawn.
+#         triangles: Set of points that form the triangles.
+#     Output:
+#         displays the created figure on the screen and saves it in the Figures folder.
+#     outline = np.append(outline,outline[0])
+# =============================================================================
     maximo = triangles['t'].max()
     for j in range(0,maximo + 1):
         x = []
@@ -84,41 +120,20 @@ def plotPointsTriangles(name,puntos,triangles):
     plt.savefig('Figures/Triangles_' + name + '.png')
     plt.show()
     
-# draw points and triangles and dual Graph on the plane 
-def plotPointsTrianglesPlusGraph(name,puntos,triangles,dualGraph):
-    maximo = triangles['t'].max()
-    for j in range(0,maximo + 1):
-        x = []
-        y = []
-        data = triangles[triangles['t']==j].values
-        for k in range(0,len(data)):
-            x.append(data[k,1])
-        x.append(data[0,1])
-        for k in range(0,len(data)):
-            y.append(data[k,2])
-        y.append(data[0,2])
-        plt.plot(x, y,'bo-')
-    lista = puntos[:,-1]
-    plt.title('Triangles_' + name[:-4])
-    plt.plot(puntos[:,[0]], puntos[:,[1]],'bo')
-    x = dualGraph.iloc[:,1].values
-    y = dualGraph.iloc[:,2].values
-    plt.plot(x, y,'bo-')
-    i = 0
-    for x,y,z in puntos:
-        text = "v{v:d}"
-        label = text.format(v = int(lista[i]))
-        i += 1
-        plt.annotate(label, # this is the text
-                     (x,y), # this is the point to label
-                     textcoords="offset points", # how to position the text
-                     xytext=(0,5), # distance from text to points (x,y)
-                     ha='center') # horizontal alignment can be left, right or center
-    plt.savefig('Figures/Triangles_' + name + '.png')
-    plt.show()
     
 # draw points and quadrilaterals on the plane for indirectMethod1 with vertex Name
 def plotPointsIndiretQuadrilate(name,puntos,triangles,outline):
+# =============================================================================
+#     Function to create a graph with points, names, triangles and quadrilaterals.
+#     Input:
+#         name: Name with which the generated figure will be saved.
+#         puntos: Arrangement with the list of points (x, y) to be drawn.
+#         triangles: array that contains the set of vertices that make up the triangles and quadrilaterals.
+#         outline: Set of points that form the contour.
+#     Output:
+#         displays the created figure on the screen and saves it in the Figures folder.
+# =============================================================================
+    outline = np.append(outline,outline[0])
     #print(outline)
     outline = np.append(outline,outline[0])
     #print(outline)
@@ -158,6 +173,16 @@ def plotPointsIndiretQuadrilate(name,puntos,triangles,outline):
     
 # draw points and quadrilaterals on the plane for indirectMethod1 without vertex Name
 def plotPointsIndiretQuadrilateWithout(name,puntos,triangles,outline):
+# =============================================================================
+#     Function to create a graph with points, triangles and quadrilaterals.
+#     Input:
+#         name: Name with which the generated figure will be saved.
+#         puntos: Arrangement with the list of points (x, y) to be drawn.
+#         triangles: array that contains the set of vertices that make up the triangles and quadrilaterals.
+#         outline: Set of points that form the contour.
+#     Output:
+#         displays the created figure on the screen and saves it in the Figures folder.
+# =============================================================================
     #print(outline)
     outline = np.append(outline,outline[0])
     #print(outline)
@@ -182,23 +207,21 @@ def plotPointsIndiretQuadrilateWithout(name,puntos,triangles,outline):
     lista = puntos[:,-1]
     plt.title('Quadrilate_' + name[:-4])
     plt.plot(puntos[:,[0]], puntos[:,[1]],'bo')
-# =============================================================================
-#     i = 0
-#     for x,y,z in puntos:
-#         text = "v{v:d}"
-#         label = text.format(v = int(lista[i]))
-#         i += 1
-#         plt.annotate(label, # this is the text
-#                      (x,y), # this is the point to label
-#                      textcoords="offset points", # how to position the text
-#                      xytext=(0,5), # distance from text to points (x,y)
-#                      ha='center') # horizontal alignment can be left, right or center
-# =============================================================================
     plt.savefig('Figures/Quadrilate_' + name + '.png')
     plt.show()
     
 # draw points and quadrilaterals on the plane with vertex name
 def plotPointsQuadrilate(name,puntos,quadrilate,triangles):
+# =============================================================================
+#     Function to create a graph with points, name, triangles and quadrilaterals for catmull-clark.
+#     Input:
+#         name: Name with which the generated figure will be saved.
+#         puntos: Arrangement with the list of points (x, y) to be drawn.
+#         quadrilate: array that contains the set of vertices that make up the quadrilaterals.
+#         triangles: array that contains the set of vertices that make up the triangles.
+#     Output:
+#         displays the created figure on the screen and saves it in the Figures folder.
+# =============================================================================
     maximo = triangles['t'].max()
     for j in range(0,maximo + 1):
         x = []
@@ -241,6 +264,16 @@ def plotPointsQuadrilate(name,puntos,quadrilate,triangles):
     
 # draw points and quadrilaterals on the plane without vertex name
 def plotPointsQuadrilateWithout(name,puntos,quadrilate,triangles):
+# =============================================================================
+#     Function to create a graph with points, triangles and quadrilaterals for catmull-clark.
+#     Input:
+#         name: Name with which the generated figure will be saved.
+#         puntos: Arrangement with the list of points (x, y) to be drawn.
+#         quadrilate: array that contains the set of vertices that make up the quadrilaterals.
+#         triangles: array that contains the set of vertices that make up the triangles.
+#     Output:
+#         displays the created figure on the screen and saves it in the Figures folder.
+# =============================================================================
     maximo = triangles['t'].max()
     for j in range(0,maximo + 1):
         x = []
@@ -268,23 +301,21 @@ def plotPointsQuadrilateWithout(name,puntos,quadrilate,triangles):
     lista = puntos[:,-1]
     plt.title('Quadrilate_' + name[0:-4])
     plt.plot(puntos[:,[0]], puntos[:,[1]],'bo')
-# =============================================================================
-#     i = 0
-#     for x,y,z in puntos:
-#         text = "v{v:d}"
-#         label = text.format(v = int(lista[i]))
-#         i += 1
-#         plt.annotate(label, # this is the text
-#                      (x,y), # this is the point to label
-#                      textcoords="offset points", # how to position the text
-#                      xytext=(0,5), # distance from text to points (x,y)
-#                      ha='center') # horizontal alignment can be left, right or center
-# =============================================================================
     plt.savefig('Figures/Quadrilate_' + name + '.png')
     plt.show()
     
 # draw points and quadrilaterals on the plane for indirect2 function with vertex Name
 def plotPointsQuadrilate2(name,puntos,quadrilate,triangles):
+# =============================================================================
+#     Function to create a graph with points, name, triangles and quadrilaterals for cluster triangle method.
+#     Input:
+#         name: Name with which the generated figure will be saved.
+#         puntos: Arrangement with the list of points (x, y) to be drawn.
+#         quadrilate: array that contains the set of vertices that make up the quadrilaterals.
+#         triangles: array that contains the set of vertices that make up the triangles.
+#     Output:
+#         displays the created figure on the screen and saves it in the Figures folder.
+# =============================================================================
     maximo = triangles['Q'].max()
     for j in range(0,maximo + 1):
         x = []
@@ -327,6 +358,16 @@ def plotPointsQuadrilate2(name,puntos,quadrilate,triangles):
 
 # draw points and quadrilaterals on the plane for indirect2 function without vertex Name
 def plotPointsQuadrilate2without(name,puntos,quadrilate,triangles):
+# =============================================================================
+#     Function to create a graph with points, triangles and quadrilaterals for cluster triangle method.
+#     Input:
+#         name: Name with which the generated figure will be saved.
+#         puntos: Arrangement with the list of points (x, y) to be drawn.
+#         quadrilate: array that contains the set of vertices that make up the quadrilaterals.
+#         triangles: array that contains the set of vertices that make up the triangles.
+#     Output:
+#         displays the created figure on the screen and saves it in the Figures folder.
+# =============================================================================
     maximo = triangles['Q'].max()
     for j in range(0,maximo + 1):
         x = []
@@ -354,37 +395,24 @@ def plotPointsQuadrilate2without(name,puntos,quadrilate,triangles):
     lista = puntos[:,-1]
     plt.title('QuadrilateInd2_' + name[0:-4])
     plt.plot(puntos[:,[0]], puntos[:,[1]],'bo')
-# =============================================================================
-#     i = 0
-#     for x,y,z in puntos:
-#         text = "v{v:d}"
-#         label = text.format(v = int(lista[i]))
-#         i += 1
-#         plt.annotate(label, # this is the text
-#                      (x,y), # this is the point to label
-#                      textcoords="offset points", # how to position the text
-#                      xytext=(0,5), # distance from text to points (x,y)
-#                      ha='center') # horizontal alignment can be left, right or center
-# =============================================================================
     plt.savefig('Figures/QuadrilateInd2_' + name + '.png')
     plt.show()    
     
 
-# find the point with the smallest angle between vertex
-def angleVertex(x1,y1,x2,y2,x3,y3):
-    vector_1 = [x2 - x1, y2 - y1]
-    vector_2 = [x3 - x1, y3 - y1]
-    cosTh = np.dot(vector_1,vector_2)
-    sinTh = np.cross(vector_1,vector_2)
-    angle = np.rad2deg(np.arctan2(sinTh,cosTh))
-    if ( angle < 0):
-        return 360 + angle
-    else:
-        return angle
-    
-
 # Determine the angle between a reference point and two points in radians
 def findAngle(x1,y1,x3,y3,x4,y4):
+# =============================================================================
+#     Function for determine the angle between a reference point and two points in radians
+#     Input:
+#         x1: x component of the reference point.
+#         y1: y component of the reference point.
+#         x3: x component of the first comparison point.
+#         y3: y component of the first comparison point.
+#         x4: x component of the second comparison point.
+#         y4: y component of the second comparison point.
+#     Output:
+#         angle between the reference point and the first comparison point, angle between the reference point and the second comparison point.
+# =============================================================================
     x2 = x1+ 10
     y2 = y1
     vector_1 = [x2 - x1, y2 - y1]
@@ -401,6 +429,23 @@ def findAngle(x1,y1,x3,y3,x4,y4):
 
 # Find the positive order in which the vertices should be stored
 def dataforAngles(ang1,ang2,v1,ax,ay,v2,bx,by,trian,tableVertex,x):
+# =============================================================================
+#     Function to determine the order that produces a positive sense of the vertices
+#     Input:
+#         ang1: Angle between the anchor vertices and the first reference vertex.
+#         ang2: Angle between the anchor vertices and the second reference vertex.
+#         v1: Id of first reference vertex.
+#         ax: x component of v1.
+#         ay: y component of v1.
+#         v2: Id of second reference vertex.
+#         bx: x component of v2.
+#         by: y component of v2.
+#         trian: Id of triangle.
+#         tableVertex: Vertex table arrangement.
+#         x: x component of anchor vertex.
+#     Output:
+#         tableVertex
+# =============================================================================
     if(np.sign(ang1) == np.sign(ang2)):
         if(np.sign(ang1) < 0):
             if(abs(ang1) > abs(ang2)):
@@ -451,23 +496,35 @@ def dataforAngles(ang1,ang2,v1,ax,ay,v2,bx,by,trian,tableVertex,x):
 
 # Determine if a point is to the right of a line defined by two points.
 def pointRight(ax, ay, bx, by, cx, cy):
+# =============================================================================
+#     Funtion to determine if a point is to the right of a line defined by two points.
+#     Input:
+#         ax: x component of firt point of reference.
+#         ay: y component of firt point of reference.
+#         bx: x component of second point of reference.
+#         by: y component of second point of reference.
+#         cx: x component of anchor vertex.
+#         cy: y component of anchor vertex.
+#     Output:
+#         Boolean.
+# =============================================================================
     return (((bx - ax)*(cy - ay) - (by - ay)*(cx - ax)) < 0)
-#Donde a \= punto de línea 1; b \= punto de línea 2; c \= punto a comprobar.
 
-
-# Define if the angles of the 3 points are convex
-def isConvex2(x1,y1,x2,y2,x3,y3):
-    vector_1 = [x2 - x1, y2 - y1]
-    vector_2 = [x3 - x1, y3 - y1]
-    unit_vector_1 = vector_1 / np.linalg.norm(vector_1)
-    unit_vector_2 = vector_2 / np.linalg.norm(vector_2)
-    dot_product = np.dot(unit_vector_1, unit_vector_2)
-    angle = np.arccos(dot_product)
-    degrees = math.degrees(angle)
-    return degrees
 
 # Inter triangle angles
 def needinvertEdge(t1,t2,equal,differ,sort,tableTriangle):
+# =============================================================================
+#     Function to determine whether the triangle concatenation method, it is necessary to invert the common edge between triangles.
+#     Input:
+#         t1: Arrangement with data from triangle 1.
+#         t2: Arrangement with data from triangle 2.
+#         equal: list of vertex in common between t1 and t2.
+#         differ: list of vertex not in common between t1 and t2.
+#         sort: vertex sort list.
+#         tableTriangle: Vertex table arrangement.
+#     Output:
+#         Boolean.
+# =============================================================================
     tv1 = tableTriangle[tableTriangle['t']==t1].values.flatten()
     tv2 = tableTriangle[tableTriangle['t']==t2].values.flatten()
     t1ver = [tv1[1],tv1[2],tv1[3]]
@@ -549,6 +606,17 @@ def needinvertEdge(t1,t2,equal,differ,sort,tableTriangle):
 
 # Define if the angles of the 4 points are convex
 def convex(t1,t2,sort,tableTriangle):
+# =============================================================================
+#     Function that determines if a polygon is convex.
+#     Input:
+#         t1: Arrangement with data from triangle 1.
+#         t2: Arrangement with data from triangle 2.
+#         sort: vertex sort list.
+#         tableTriangle: Vertex table arrangement.
+#     Output:
+#         Boolean.
+# =============================================================================
+        
     tv1 = tableTriangle[tableTriangle['t']==t1].values.flatten()
     tv2 = tableTriangle[tableTriangle['t']==t2].values.flatten()
     #print(tv1,tv2)
@@ -573,72 +641,16 @@ def convex(t1,t2,sort,tableTriangle):
             return False, equal,differ
     return True, equal,differ
 
-    
-# Triangle table construction
-def triangleTableB(tableVertex,tableTriangle):
-    maximo = len(tableVertex)
-    for k in range(0, maximo,3):
-        new_triangle = {'t':tableVertex.iloc[k,3], 'V0':tableVertex.iloc[k,0], 'V1':tableVertex.iloc[k+1,0],'V2':tableVertex.iloc[k+2,0],'t0':-1,'t1':-1,'t2':-1}
-        tableTriangle = tableTriangle.append(new_triangle,ignore_index=True)
-
-    ind = np.full(len(tableTriangle),4)
-    for l in range(0,len(tableTriangle) - 1):
-        end = False
-        i = l + 1
-        anchor = tableTriangle[tableTriangle['t']==l].values.flatten()
-        while not end and ind[i] != 7:
-            slide = tableTriangle[tableTriangle['t']==i].values.flatten()
-            if(((anchor[1]==slide[1] or anchor[1]==slide[2] or anchor[1]==slide[3]) and 
-               (anchor[2]==slide[1] or anchor[2]==slide[2] or anchor[2]==slide[3])) or
-               ((anchor[3]==slide[1] or anchor[3]==slide[2] or anchor[3]==slide[3]) and 
-               (anchor[2]==slide[1] or anchor[2]==slide[2] or anchor[2]==slide[3])) or
-               ((anchor[1]==slide[1] or anchor[1]==slide[2] or anchor[1]==slide[3]) and 
-               (anchor[3]==slide[1] or anchor[3]==slide[2] or anchor[3]==slide[3]))):
-                if(ind[l] == 4):
-                    tableTriangle.loc[tableTriangle['t']==l, 't0'] = slide[0]
-                    ind[l] += 1
-                    if(ind[i] == 4):
-                        tableTriangle.loc[tableTriangle['t']==i, 't0'] = anchor[0]
-                        ind[i] += 1
-                    elif(ind[i] == 5):
-                        tableTriangle.loc[tableTriangle['t']==i, 't1'] = anchor[0]
-                        ind[i] += 1
-                    else:
-                        tableTriangle.loc[tableTriangle['t']==i, 't2'] = anchor[0]
-                        ind[i] += 1
-                elif(ind[l] == 5):
-                    tableTriangle.loc[tableTriangle['t']==l, 't1'] = slide[0]
-                    ind[l] += 1
-                    if(ind[i] == 4):
-                        tableTriangle.loc[tableTriangle['t']==i, 't0'] = anchor[0]
-                        ind[i] += 1
-                    elif(ind[i] == 5):
-                        tableTriangle.loc[tableTriangle['t']==i, 't1'] = anchor[0]
-                        ind[i] += 1
-                    else:
-                        tableTriangle.loc[tableTriangle['t']==i, 't2'] = anchor[0]
-                        ind[i] += 1
-                else:
-                    tableTriangle.loc[tableTriangle['t']==l, 't2'] = slide[0]
-                    ind[l] += 1
-                    if(ind[i] == 4):
-                        tableTriangle.loc[tableTriangle['t']==i, 't0'] = anchor[0]
-                        ind[i] += 1
-                    elif(ind[i] == 5):
-                        tableTriangle.loc[tableTriangle['t']==i, 't1'] = anchor[0]
-                        ind[i] += 1
-                    else:
-                        tableTriangle.loc[tableTriangle['t']==i, 't2'] = anchor[0]
-                        ind[i] += 1
-                if(ind[l] == 7):
-                    end = True
-            i += 1
-            if(i == len(tableTriangle)):
-                end = True
-    return tableTriangle
-
 # Triangle table construction
 def triangleTable(tableVertex2,tableTriangle):
+# =============================================================================
+#     Function that creates the arrangement of triangles based on the arrangement of vertices.
+#     Input:
+#         tableVertex2: vertex arrangement.
+#         tableTriangle: original vertex arrangement.
+#     Output:
+#         Triangle array
+# =============================================================================
     tableVertex = tableVertex2.copy()
     maximo = len(tableVertex)
     for k in range(0, maximo,3):
@@ -691,10 +703,31 @@ def triangleTable(tableVertex2,tableTriangle):
 
 # find the center point between two points
 def midpoint(x0,y0,x1,y1):
+# =============================================================================
+#     Function to determine the center point between two points.
+#     Input:
+#         x0: x component of first point.
+#         y0: y component of first point.
+#         x1: x component of second point.
+#         y1: y component of second point.
+#     Output:
+#         x,y component of center point.
+# =============================================================================
     return ((x0 + x1)/2),((y0 + y1)/2)
 
 # Funtion for application of the Catmull-Clark Quadrilateral Method
 def catnullQuad(tableVertex,sort,fileName,convexClosure):
+# =============================================================================
+#     Function to apply the catmull-clark algorithm.
+#     Input: 
+#         tableVertex: Vertex table arrangement.
+#         sort: vertex sort list.
+#         fileName: Name to save plot.
+#         convexClosure: list of vertices that make up the convex limit.
+#     Output:
+#         arrangement with list of squares, list of vertices ordered.
+# =============================================================================
+        
     limit = tableVertex['t'].max()
     numVertex = tableVertex['V'].max()
     indexQuad = int(0)
@@ -791,6 +824,17 @@ def catnullQuad(tableVertex,sort,fileName,convexClosure):
 
 # Firs Indirect method
 def indirectMethod1(tableVertex2,tableTriangle2,sort,fileName,convexClosure):
+# =============================================================================
+#     Function to apply the clustering algorithm.
+#     Input: 
+#         tableVertex2: Vertex table arrangement.
+#         tableTriangle2: arrangement with the list of triangles.
+#         sort: vertex sort list.
+#         fileName: Name to save plot.
+#         convexClosure: list of vertices that make up the convex limit.
+#     Output:
+#         arrangement with list of squares, arrangement with the list of common axis distances between the grouped triangles.
+# =============================================================================
     tableVertex = tableVertex2.copy()
     tableTriangle = tableTriangle2.copy()
     tableEdges = pd.DataFrame(columns = ['Distance', 'V0', 'V1','t0','t1'])
@@ -996,19 +1040,7 @@ def indirectMethod1(tableVertex2,tableTriangle2,sort,fileName,convexClosure):
         tvt = tvt.replace({'Q':value}, indexQuad)
         indexQuad += 1
         
-        tableQuad = tableQuad.append(tvt,ignore_index=True)
-        
-# =============================================================================
-#         tableVertex = tableVertex.replace({'Q':value}, indexQuad)
-#         tableVertex = tableVertex.reset_index(drop = True)
-#         tv3 = tableVertex[tableVertex['Q']==indexQuad]
-#         tv3 = tv3.reset_index(drop = True)
-#         tableVertex = tableVertex[tableVertex.Q != indexQuad]
-#         indexQuad += 1
-# 
-#         tableQuad = tableQuad.append(tv3,ignore_index=True)
-# =============================================================================
-        
+        tableQuad = tableQuad.append(tvt,ignore_index=True)  
         plotPointsIndiretQuadrilate(str(indexQuad) + '_' +'Indirect1_' + fileName,sort,tableQuad,convexClosure)
         plotPointsIndiretQuadrilateWithout(str(indexQuad - 1) + '_' +'Indirect1_' + fileName,sort,tableQuad,convexClosure)
 
@@ -1016,6 +1048,13 @@ def indirectMethod1(tableVertex2,tableTriangle2,sort,fileName,convexClosure):
 
 #Find the center of polygon
 def centroid(vertexes):
+# =============================================================================
+#     Function to find the center point of a polygon.
+#     Input:
+#         vertexes: list of polygon vertex.
+#     Output:
+#         x,y center component
+# =============================================================================
      _x_list = [vertex [0] for vertex in vertexes]
      _y_list = [vertex [1] for vertex in vertexes]
      _len = len(vertexes)
@@ -1025,6 +1064,18 @@ def centroid(vertexes):
 
 # Second Indirect method
 def indirectMethod2(tableVertex2,tableTriangle2,sort,fileName,convexClosure,tableEdges):
+# =============================================================================
+#     Function to apply the clustering algorithm on catmull-clark result.
+#     Input: 
+#         tableVertex2: Vertex table arrangement.
+#         tableTriangle2: arrangement with the list of triangles.
+#         sort: vertex sort list.
+#         fileName: Name to save plot.
+#         convexClosure: list of vertices that make up the convex limit.
+#         tableEdges: arrangement with the list of common axis distances between the grouped triangles.
+#     Output:
+#         arrangement with list of squares, arrangement with the list of sort vertex.
+# =============================================================================
     tableVertex = tableVertex2.copy()
     tableTriangle = tableTriangle2.copy()
     tableQuad = pd.DataFrame(columns = ['V', 'x', 'y','Q']) 
@@ -1257,6 +1308,16 @@ def indirectMethod2(tableVertex2,tableTriangle2,sort,fileName,convexClosure,tabl
          
 # Makes points at random
 def randomPoint(nPoint,file,lowLimit,upperLimit):
+# =============================================================================
+#     Function to create a file with a point cloud.
+#     Input:
+#         nPoint: number of vertices to be created.
+#         file: name for file.
+#         lowLimit: lower limit
+#         upperLimit: upper Limit
+#     Output:
+#         Txt File
+# =============================================================================
     n = int(nPoint)
     x = np.random.randint(lowLimit,upperLimit, size=n)
     y = np.random.randint(lowLimit,upperLimit, size=n)
@@ -1264,37 +1325,23 @@ def randomPoint(nPoint,file,lowLimit,upperLimit):
         file.write(str(x[a])+ "   " + str(y[a]) + "\n")
     file.close()
 
-def dualGraphGenerator(fileName,tableVertex,sort):
-    dualGraph = pd.DataFrame(columns = ['V', 'x', 'y','t'])
-    numVertex = tableVertex['V'].max()
-    limit = tableVertex['t'].max()
-    for i in range(0,limit + 1):
-        tv1 = tableVertex[tableVertex['t']== i]
-        tv1 = tv1.reset_index(drop = True)
-        print(tv1)
-        numVertex += 1
-        
-        centerX = (tv1.iloc[0,1] + tv1.iloc[1,1] + tv1.iloc[2,1])/3
-        centerY = (tv1.iloc[0,2] + tv1.iloc[1,2] + tv1.iloc[2,2])/3
-        centerNum = numVertex
-        
-        new_vertex = {'V':centerNum, 'x':centerX, 'y':centerY, 'Q':-1}
-        dualGraph = dualGraph.append(new_vertex,ignore_index=True)
-        sort = np.append(sort,[[centerX,centerY,centerNum]], axis = 0)
-        plotPointsTrianglesPlusGraph(fileName,sort,tableVertex,dualGraph)
-    return dualGraph, sort
-        
-        
-        
-                        
-                        
-                
+           
 
 if __name__ == '__main__':
     
     theEnd = False
     while not theEnd:
         
+        if not os.path.exists(path[:-1]):
+            os.makedirs(path[:-1]) 
+        if not os.path.exists(path2[:-1]):
+            os.makedirs(path2[:-1]) 
+            os.makedirs(path2 + 'Catnull-Clark')
+            os.makedirs(path2 + 'Delaunay') 
+            os.makedirs(path2 + 'Hamiltonian') 
+            os.makedirs(path2 + 'Indirect1') 
+            os.makedirs(path2 + 'Indirect2') 
+            
         flag = True
     
         # Verify that the input option is valid
@@ -1646,279 +1693,3 @@ if __name__ == '__main__':
             
         elif(option == '6'):
             theEnd = True
-            
-            
-# =============================================================================
-#         elif(option == '6'):
-#             Hamiltonian = open(path2 + 'Hamiltonian/' + 'HamiltonianTime.txt', 'a')
-#             try:
-#                 fileList = glob.glob(path2 + 'Delaunay/Vertex/' + '*.txt')
-#             except Exception:
-#                 print("Problem to Read txt Files\n")
-#             try:
-#                 fileList2 = glob.glob(path2 + 'Delaunay/Triangles/' + '*.txt')
-#             except Exception:
-#                 print("Problem to Read txt Files\n")
-#             try:
-#                 fileList3 = glob.glob(path2 + 'Delaunay/ListVertexSorted/' + '*.npy')
-#             except Exception:
-#                 print("Problem to Read txt Files\n")
-#             try:
-#                 fileList4 = glob.glob(path2 + 'Delaunay/ConvexClosure/' + '*.npy')
-#             except Exception:
-#                 print("Problem to Read txt Files\n")
-#             
-#             
-# # =============================================================================
-# #             for n in range(0,len(fileList)):
-# # =============================================================================
-#             for n in range(1,2):
-#                 name = fileList3[n]
-#                 fileName = name.split('\\')[1]
-#                 fileName = 'nuvem' + fileName[4:]
-#                 print(fileName)
-#                 tableVertex = pd.read_csv(fileList[n], sep=' ')
-#                 tableTriangle = pd.read_csv(fileList2[n], sep=' ')
-#                 sort = np.load(fileList3[n])
-#                 convexClosure = np.load(fileList4[n], allow_pickle=True)
-#                 
-#                 # second indirect method
-#                 indirect1Time = time()
-#                 dualGraph, sortG = dualGraphGenerator(fileName,tableVertex,sort)
-# # =============================================================================
-# #                 TableQuad3, sortQ = indirectMethod2(tableVertex,tableTriangle,sort,fileName,convexClosure)
-# #                 TableQuad3 = TableQuad3.astype({'V': int, 'x': float, 'y':float, 'Q':int})
-# #                 TableQuad3.x = TableQuad3.x.round(2)
-# #                 TableQuad3.y = TableQuad3.y.round(2)
-# #                 TableQuad3.to_csv(path2 + 'Indirect2/Vertex/' + 'TableVertexIndirect2_' + fileName[5: len(fileName) - 4]  + ".txt", index=False, sep=' ')
-# # =============================================================================
-#                 indirect1ElapseTiem = (time() - indirect1Time)
-#                 Hamiltonian.write(f'{fileName[: len(fileName) - 4]}:   {indirect1ElapseTiem}\n')
-#             
-#             Hamiltonian.close()
-# =============================================================================
-                
-# =============================================================================
-#     # upload all files of folder Files
-#     try:
-#         fileList = glob.glob(path + '*.txt')
-#     except Exception:
-#         print("Problem to Read txt Files\n")
-#       
-#     timeControl = open(path2 + "Time.txt", 'a')
-#     timeQuadrila = open(path2 + "QuadTime.txt", 'a')
-#     timeIndirect1 = open(path2 + "Indirect1Time.txt", 'a')
-#     
-# # =============================================================================
-# #     for name in fileList:
-# # =============================================================================
-#     for n in range(1,2):
-#         name = fileList[n]
-#         fileName = name.split('\\')[1]
-#         x,y = np.loadtxt(name,dtype=int,unpack=True)
-#         lista = np.linspace(0, len(x) - 1, len(x))
-#         puntos = np.array([x,y]).T
-#         sort = puntos[np.argsort(puntos[:,0])]
-#         sort = np.hstack((sort,np.atleast_2d(lista).T))
-#         sort = sort.astype(int)
-#         tableVertex = pd.DataFrame(columns = ['V', 'x', 'y','t']) 
-#         tableTriangle = pd.DataFrame(columns = ['t', 'V0', 'V1','V2','t0','t1','t2'])
-#         plotPoints(fileName,sort)
-#         #print(sort)
-#         convexClosure = []
-#         new_vertex = {'V':0, 'x':sort[0,0], 'y':sort[0,1], 't':0}
-#         tableVertex = tableVertex.append(new_vertex,ignore_index=True)
-#         ang1, ang2 = findAngle(sort[0,0],sort[0,1],sort[1,0],sort[1,1],sort[2,0],sort[2,1])
-#         #print(ang1,ang2)
-#         
-#         tableVertex = dataforAngles(ang1,ang2,sort[1,2],sort[1,0],sort[1,1],sort[2,2],sort[2,0],sort[2,1],0,tableVertex,sort[0,0])
-#         convexClosure = tableVertex['V'].values.flatten()
-#         ElapsedTime = 0
-#         
-#         start_time2 = time()
-#         # Incremental triangulation
-#         start_time = time()
-#         for j in range(3,len(sort)):
-#             i = 0
-#             lastInsert = 0
-#             while (i < len(convexClosure)):
-#                 #print(f'i = {i}, tamano = {len(convexClosure)}')
-#                 if (i != len(convexClosure) - 1):
-#                     ax = sort[convexClosure[i],0]
-#                     ay = sort[convexClosure[i],1]
-#                     bx = sort[convexClosure[i+1],0]
-#                     by = sort[convexClosure[i+1],1]
-#                     cx = sort[j,0]
-#                     cy = sort[j,1]
-#                     if pointRight(ax, ay, bx, by, cx, cy):
-#                         maximo = tableVertex['t'].max()
-#                         new_vertex = {'V':sort[j,2], 'x':cx, 'y':cy, 't':maximo+1}
-#                         tableVertex = tableVertex.append(new_vertex,ignore_index=True)
-#                         ang1, ang2 = findAngle(cx, cy, ax, ay, bx, by)
-#                         #print(ax,ay)
-#                         #print(ang1,ang2)
-#                         tableVertex = dataforAngles(ang1,ang2,sort[convexClosure[i],2],ax, ay,sort[convexClosure[i+1],2],bx, by,maximo+1,tableVertex,cx)
-#                         if(sort[j,2] != lastInsert):
-#                             lastInsert = sort[j,2]
-#                             convexClosure = np.insert(convexClosure,i + 1,sort[j,2])
-#                             i += 1
-#                         else:
-#                             convexClosure = np.delete(convexClosure,i)
-#                             i -= 1
-#                 else:
-#                     ax = sort[convexClosure[i],0]
-#                     ay = sort[convexClosure[i],1]
-#                     bx = sort[convexClosure[0],0]
-#                     by = sort[convexClosure[0],1]
-#                     cx = sort[j,0]
-#                     cy = sort[j,1]
-#                     if pointRight(ax, ay, bx, by, cx, cy):
-#                         maximo = tableVertex['t'].max()
-#                         new_vertex = {'V':sort[j,2], 'x':cx, 'y':cy, 't':maximo+1}
-#                         tableVertex = tableVertex.append(new_vertex,ignore_index=True)
-#                         ang1, ang2 = findAngle(cx, cy, ax, ay, bx, by)
-#                         tableVertex = dataforAngles(ang1,ang2,sort[convexClosure[i],2],ax, ay,sort[convexClosure[0],2],bx, by,maximo+1,tableVertex,cx)
-#                         if(sort[j,2] != lastInsert):
-#                             lastInsert = sort[j,2]
-#                             convexClosure = np.insert(convexClosure,i + 1,sort[j,2])
-#                             i += 1
-#                         else:
-#                             convexClosure = np.delete(convexClosure,i)
-#                             i -= 1
-#                 i += 1
-#                 #print(convexClosure)
-#         
-# # =============================================================================
-# #         print(tableVertex)
-# #         print(convexClosure)
-# # =============================================================================
-#         tableVertex.to_csv(path2 + 'TableVertexTriangles' + fileName[len(fileName) - 5: len(fileName) - 4]  + ".txt", index=False, sep=' ') 
-#         ElapsedTime += (time() - start_time)
-#         
-#         plotPointsOutline(fileName,sort,convexClosure)
-#         plotPointsTriangles(fileName,sort,tableVertex)
-#         
-#         # Triangle table construction
-#         start_time = time()
-#         tableTriangle = triangleTable(tableVertex,tableTriangle)
-#         tableTriangle.to_csv(path2 + 'TableTriangles' + fileName[len(fileName) - 5: len(fileName) - 4]  + ".txt", index=False, sep=' ') 
-# 
-# # =============================================================================
-# #         #Catnull-Clark-based quadrilaterals
-# #         quadTime = time()
-# #         tableQuad, sortQ = catnullQuad(tableVertex,sort,fileName,convexClosure)
-# #         tableQuad = tableQuad.astype({'V': int, 'x': float, 'y':float, 'Q':int})
-# #         tableQuad.x = tableQuad.x.round(2)
-# #         tableQuad.y = tableQuad.y.round(2)
-# #         tableQuad.to_csv(path2 + 'TableVertexQuadrilateral' + fileName[len(fileName) - 5: len(fileName) - 4]  + ".txt", index=False, sep=' ')
-# #         quadElapseTiem = (time() - quadTime)
-# #         timeQuadrila.write(f'{fileName[: len(fileName) - 4]}:   {quadElapseTiem}\n')
-# # =============================================================================
-#         
-# # =============================================================================
-# #         indirect1Time = time()
-# #         TableQuad2 = indirectMethod1(tableVertex,tableTriangle,sort,fileName,convexClosure)
-# #         indirect1ElapseTiem = (time() - indirect1Time)
-# #         timeIndirect1.write(f'{fileName[: len(fileName) - 4]}:   {indirect1ElapseTiem}\n')
-# # =============================================================================
-#         
-# # =============================================================================
-# #         tableQuad2, tableVertexQ2 = indirectMethod1(tableVertex,tableTriangle,sort)
-# # =============================================================================
-# 
-# 
-# # =============================================================================
-# #         print(tableTriangle)
-# #         print(type(tableTriangle))
-# #         print(type(tableVertex))
-# # =============================================================================
-#                     
-#         ElapsedTime += (time() - start_time)
-#         #print(tableTriangle)
-#         
-#         start_time = time()
-# 
-#         change = False
-#         k = 0
-#         count = 0
-#         while (k < len(tableTriangle) or not change):
-#             for i in range(4,7):
-#                 t1 = tableTriangle.iloc[k,0]
-#                 t2 = tableTriangle.iloc[k,i] 
-#                 #print(f't1 = {t1}, t2 = {t2}')
-#                 if(t2 != -1):
-#                     state, equal, differ = convex(t1,t2,sort,tableTriangle) 
-#                     #print(f'state = {state}')
-#                     if state:
-#                         if (needinvertEdge(t1,t2,equal,differ,sort,tableTriangle)):
-#                             tableVertex2 = pd.DataFrame(columns = ['V', 'x', 'y','t']) 
-#                             new_vertex = {'V':differ[0], 'x':sort[differ[0],0], 'y':sort[differ[0],1], 't':t1}
-#                             tableVertex2 = tableVertex2.append(new_vertex,ignore_index=True)
-#                             
-#                             ang1, ang2 = findAngle(sort[differ[0],0],sort[differ[0],1],sort[differ[1],0],sort[differ[1],1],sort[equal[0],0],sort[equal[0],1])
-#                             tableVertex2 = dataforAngles(ang1,ang2,differ[1],sort[differ[1],0],sort[differ[1],1],equal[0],sort[equal[0],0],sort[equal[0],1],t1,
-#                                                           tableVertex2,sort[differ[0],0])
-#                             passk = tableVertex2.values
-#                             tableVertex.loc[tableVertex.t == t1] = passk
-#                             
-#                             tableVertex2 = pd.DataFrame(columns = ['V', 'x', 'y','t']) 
-#                             new_vertex = {'V':differ[1], 'x':sort[differ[1],0], 'y':sort[differ[1],1], 't':t2}
-#                             tableVertex2 = tableVertex2.append(new_vertex,ignore_index=True)
-#                             
-#                             ang1, ang2 = findAngle(sort[differ[1],0],sort[differ[1],1],sort[differ[0],0],sort[differ[0],1],sort[equal[1],0],sort[equal[1],1])
-#                             tableVertex2 = dataforAngles(ang1,ang2,differ[0],sort[differ[0],0],sort[differ[0],1],equal[1],sort[equal[1],0],sort[equal[1],1],t2,
-#                                                           tableVertex2,sort[differ[1],0])
-#                             passk = tableVertex2.values
-#                             tableVertex.loc[tableVertex.t == t2] = passk
-#                             tableTriangle = pd.DataFrame(columns = ['t', 'V0', 'V1','V2','t0','t1','t2'])
-#                             tableTriangle = triangleTable(tableVertex,tableTriangle)
-#                             change = True
-#                             plotPointsTriangles(str(k) + '_' + fileName,sort,tableVertex)
-#                             print('\ntableVertex')
-#                             print(tableVertex)
-#                             print('ok')
-#             k += 1
-#             if(change and k == len(tableTriangle)):
-#                 k = 0
-#                 change = False
-#             elif(change):
-#                 change = False
-#             elif(not change and k == len(tableTriangle) ):
-#                 if(count == 2):
-#                     change = True
-#                 else:
-#                     count += 1
-#                     k = 0
-#                     
-#         df2 = tableTriangle.loc[:,'V0':'V2']
-#         tableVertex.to_csv(path2 + 'TableVertexTriangles' + fileName[len(fileName) - 5: len(fileName) - 4]  + "_Final.txt", index=False, sep=' ')
-#         tableTriangle.to_csv(path2 + 'TableTriangles' +  fileName[len(fileName) - 5: len(fileName) - 4]  + "_Final.txt", index=False, sep=' ') 
-#         np.savetxt(path2 + 'dalaunay' + fileName[len(fileName) - 5: len(fileName) - 4] + '.txt', df2.values, fmt='%d')
-#         #print(df2)
-#         
-# # =============================================================================
-# #         quadTime = time()
-# #         tableQuad, sortQ = catnullQuad(tableVertex,sort,fileName,convexClosure)
-# #         tableQuad = tableQuad.astype({'V': int, 'x': float, 'y':float, 'Q':int})
-# #         tableQuad.x = tableQuad.x.round(2)
-# #         tableQuad.y = tableQuad.y.round(2)
-# #         tableQuad.to_csv(path2 + 'TableVertexQuadrilateral' + fileName[len(fileName) - 5: len(fileName) - 4]  + "_Delaynay.txt", index=False, sep=' ')
-# #         quadElapseTiem = (time() - quadTime)
-# #         timeQuadrila.write(f'{fileName[: len(fileName) - 4]} Delaunay:   {quadElapseTiem}\n')
-# # =============================================================================
-#         
-#         indirect1Time = time()
-#         TableQuad2 = indirectMethod1(tableVertex,tableTriangle,sort,fileName,convexClosure)
-#         indirect1ElapseTiem = (time() - indirect1Time)
-#         timeIndirect1.write(f'{fileName[: len(fileName) - 4]} Delaunay:   {indirect1ElapseTiem}\n')
-# 
-#         
-#         ElapsedTime += (time() - start_time)
-#         ElapsedTime2 = (time() - start_time2)
-#         timeControl.write(f'{fileName[: len(fileName) - 4]}   {ElapsedTime2}\n')
-#     timeControl.close()
-#     timeQuadrila.close()
-#     timeIndirect1.close()
-# =============================================================================
-        
-
